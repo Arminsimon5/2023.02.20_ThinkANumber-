@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gondoltam egy számra</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+    <style>
+        .health-img {
+            width: 10%;
+        }
+        
+        .health-img.hide {
+            display: none;
+        }
+        .btn-lg {
+            width: 49%;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal fade" id="jatekVegeModal" tabindex="-1" aria-labelledby="jatekVegeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="jatekVegeModalLabel">Győzelem</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Szeretne-e új játékot játszani?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.reload()">Nem</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="ujJatek();">Igen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="konnyuJatekModal" tabindex="-1" aria-labelledby="konnyuJatekModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="konnyuJatekModalLabel">Nehézség váltása</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Biztosan új játékot kezd a kiválasztott nehézséggel?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nem</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="konnyuJatek();">Igen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="nehezJatekModal" tabindex="-1" aria-labelledby="nehezJatekModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="nehezJatekModalLabel">Nehézség váltása</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Biztosan új játékot kezd a kiválasztott nehézséggel?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nem</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="nehezJatek();">Igen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <main class="container">
+        <div class="text-center col-lg-6 m-auto">
+            <div class="">
+                <button type="button" class="btn btn-secondary btn-lg" onclick="konnyuJatekModalMegjelenes()">KÖNNYŰ</button>
+                <button type="button" class="btn btn-secondary btn-lg" onclick="nehezJatekModalMegjelenes()">NEHÉZ</button>
+            </div>
+            <div>
+                <img class="health-img" src="think_a_number_src/heart2.png" alt="Élet1" id="hp1">
+                <img class="health-img" src="think_a_number_src/heart2.png" alt="Élet2" id="hp2">
+                <img class="health-img" src="think_a_number_src/heart2.png" alt="Élet3" id="hp3">
+                <img class="health-img" src="think_a_number_src/heart2.png" alt="Élet4" id="hp4">
+                <img class="health-img" src="think_a_number_src/heart2.png" alt="Élet5" id="hp5">
+            </div>
+            <h1 >Gondoltam egy számra!</h1>
+            <form name="gondotamEgySzamraUrlap"  class="mb-3">
+                <div class="input-group mb-3">
+                    <button class="btn btn-secondary" type="button" id="buttonMinusz">-</button>
+                    <input type="number" class="form-control" min="1" max="10" value="1" placeholder="Tippelt szám" name="tipp" required>
+                    <button class="btn btn-secondary" type="button" id="buttonPlusz">+</button>
+                </div>
+                <div class="d-grid" >
+                    <button type="submit" class="btn btn-secondary">Tipp</button>
+                </div>
+            </form>
+            <div class="alert alert-warning fade hide" role="alert" id="visszajelzes">
+                
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const jatekVegeModal = new bootstrap.Modal(document.getElementById('jatekVegeModal'), {
+            backdrop: "static"
+        });
+        const konnyuJatekModal = new bootstrap.Modal(document.getElementById('konnyuJatekModal'), {
+            backdrop: "static"
+        });
+        const nehezJatekModal = new bootstrap.Modal(document.getElementById('nehezJatekModal'), {
+            backdrop: "static"
+        });
+        const jatekVegeModalLabel = document.getElementById('jatekVegeModalLabel');
+        const urlap = document.forms.gondotamEgySzamraUrlap;
+        const tippInput = urlap.tipp;
+        const visszajelzes = document.getElementById("visszajelzes")
+        const uresHp = "think_a_number_src/heart1.png"
+        const teliHp = "think_a_number_src/heart2.png"
+        const eletKepek = [
+            document.getElementById("hp1"),
+            document.getElementById("hp2"),
+            document.getElementById("hp3"),
+            document.getElementById("hp4"),
+            document.getElementById("hp5")
+        ]
+        let eletek = 3
+        let timeoutId
+        let gondolt;
+        eletKepek[3].classList.add("hide");
+        eletKepek[4].classList.add("hide");
+        let max = 10; 
+        let nehez = false;
+        ujJatek();
+        
+
+        document.getElementById("buttonMinusz").addEventListener("click", () => {
+            const tipp = parseInt(tippInput.value) 
+            if (tipp >1) {
+                tippInput.value = tipp - 1
+            }
+            else{
+                visszajelzesMegjelenit("A tipp minimum 1 lehet.")
+            }
+        })
+        document.getElementById("buttonPlusz").addEventListener("click", () => {
+            const tipp = parseInt(tippInput.value) 
+            if (tipp <10) {
+                tippInput.value = tipp + 1;
+            }
+            else{
+                visszajelzesMegjelenit("A tipp maximum 10 lehet.")
+            }
+        })
+
+        urlap.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const tipp = tippInput.value;
+            tippel(tipp)
+        })
+
+        function tippel(tipp) {
+            if (tipp < gondolt) {
+                visszajelzesMegjelenit("A gondolt szám nagyobb.")
+                eletLevon()
+            }
+            else if (tipp > gondolt) {
+                visszajelzesMegjelenit("A gondolt szám kisebb.")
+                eletLevon()
+            }
+            else{
+                gyozelem();
+            }
+        }
+        function visszajelzesMegjelenit(szoveg){
+            clearTimeout(timeoutId);
+            visszajelzes.innerHTML = szoveg;
+            visszajelzes.classList.remove("hide")
+            visszajelzes.classList.add("show")
+            timeoutId = setTimeout(() => {
+                visszajelzes.classList.remove("show")
+                visszajelzes.classList.add("hide")
+            }, 3000);
+        }
+        function ujJatek(){
+            if (nehez) {
+                nehezJatek();
+            } else{
+                konnyuJatek();
+            }
+        }
+        function eletLevon() {
+            eletek--;
+            eletKepek[eletek].src = uresHp;
+            if (eletek == 0) {
+                vereseg();
+            }
+        }
+        function gyozelem() {
+            jatekVegeModalLabel.innerHTML ="Győzelem"
+            jatekVegeModal.show()
+        }
+        function vereseg() {
+            jatekVegeModalLabel.innerHTML = "Vereség"
+            jatekVegeModal.show()
+        }
+        function konnyuJatekModalMegjelenes(){
+            konnyuJatekModal.show()
+        }
+        function nehezJatekModalMegjelenes(){
+            nehezJatekModal.show()
+        }
+        function konnyuJatek(){
+            tippInput.setAttribute("min",1)
+            tippInput.setAttribute("max",10)
+            eletek=3
+            max = 10
+            eletKepek[3].classList.add("hide");
+            eletKepek[4].classList.add("hide");
+            gondolt = Math.floor(Math.random()* max +1)
+            console.log(gondolt);
+            eletKepek.forEach(kep => {
+                kep.src = teliHp;
+            });
+            tippInput.value = 1;
+            nehez = false;
+        }
+        function nehezJatek(){
+            tippInput.setAttribute("min",1)
+            tippInput.setAttribute("max",40)
+            eletek=5
+            max = 40
+            eletKepek[3].classList.remove("hide");
+            eletKepek[4].classList.remove("hide");
+            gondolt = Math.floor(Math.random()* max +1)
+            console.log(gondolt);
+            eletKepek.forEach(kep => {
+                kep.src = teliHp;
+            });
+            tippInput.value = 1;
+            nehez = true;
+        }
+    </script>
+</body>
+</html>
